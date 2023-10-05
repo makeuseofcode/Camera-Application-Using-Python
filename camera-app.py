@@ -103,7 +103,14 @@ def play_video(video_path):
             photo = ImageTk.PhotoImage(image=img)
             video_label.config(image=photo)
             video_label.image = photo
-            video_player.after(10, update_video_frame)
+
+            # Get the actual frame rate of the video
+            frame_rate = video_cap.get(cv2.CAP_PROP_FPS)
+
+            # Calculate the delay based on the original frame rate
+            delay = int(1000 / frame_rate)
+
+            video_player.after(delay, update_video_frame)  # Delay based on frame rate
         else:
             video_player.destroy()
 
@@ -215,7 +222,7 @@ recording_stopped = False  # Initialize recording_stopped flag
 # Create buttons
 capture_button = tk.Button(root, text="Capture", command=capture_image)
 record_button = tk.Button(root, text="Record", command=start_recording)
-stop_button = tk.Button(root, text="Stop", command=stop_recording)
+stop_button = tk.Button(root, text="Stop Recording", command=stop_recording)
 gallery_button = tk.Button(root, text="Gallery", command=open_gallery)
 quit_button = tk.Button(root, text="Quit", command=root.quit)
 
